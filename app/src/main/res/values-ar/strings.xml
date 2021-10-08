@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">abazeerapp</string>
+    <string name="enteryouremail">ادخل بريدك الالكتروني</string>
+    <string name="enteryourpass">ادخل كلمة المرور</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="customer">العميل</string>
+    <string name="ordernumber">رقم الفاتورة</string>
+    <string name="representative">المندوب</string>
+    <string name="wearhouse">المستودع</string>
+    <string name="status">الحالة</string>
+</resources>
