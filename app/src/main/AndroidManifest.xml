@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.abazeer.abazeerapp">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.abazeer.abazeerapp" android:targetSandboxVersion="1"
+    tools:targetApi="o">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -8,7 +13,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Abazeerapp">
+        android:theme="@style/Theme.Abazeerapp"
+        android:usesCleartextTraffic="true"
+
+        >
+        <activity
+            android:name=".ItemShow"
+            android:exported="true" />
         <activity
             android:name=".OrderShowPage"
             android:exported="true" />

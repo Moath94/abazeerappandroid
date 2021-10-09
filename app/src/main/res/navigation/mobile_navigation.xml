@@ -7,15 +7,13 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.abazeer.abazeerapp.ui.returnshow.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="com.abazeer.abazeerapp.ui.returnshow.ReturnShow"
+        android:label="@string/menu_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.abazeer.abazeerapp.ui.ordershow.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="com.abazeer.abazeerapp.ui.ordershow.OrderShow"
+        android:label="@string/menu_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"

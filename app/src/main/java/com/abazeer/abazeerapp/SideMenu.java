@@ -22,6 +22,7 @@ public class SideMenu extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMenuBinding binding;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
