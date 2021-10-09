@@ -100,7 +100,8 @@ public class ItemShow extends AppCompatActivity {
 
             ordertr_qty.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
             ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-            ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+            ordertr_qtyr.setText(String.valueOf(0));
+            int finalI = i;
             ordertr_qtyd.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -111,10 +112,12 @@ public class ItemShow extends AppCompatActivity {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (!charSequence.toString().isEmpty()){
-                       int diff =  OrderDataModelArrayList.get(i).getQty_done() - Integer.parseInt(charSequence.toString());
+                       int diff =  OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
                         ordertr_qtyr.setText(String.valueOf(diff));
 
 
+                    }else {
+                        ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(finalI).getQty_done()));
                     }
                 }
 

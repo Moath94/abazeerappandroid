@@ -152,7 +152,7 @@
 
                     <TextView
                         android:id="@+id/textView22"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="اسم الصنف"
@@ -168,7 +168,7 @@
 
                     <TextView
                         android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="المسلمة"

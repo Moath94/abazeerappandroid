@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/ordertr_name"
-            android:layout_width="50dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -28,7 +28,7 @@
 
         <EditText
             android:id="@+id/ordertr_qtyd"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
