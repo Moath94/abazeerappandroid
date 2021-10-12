@@ -9,4 +9,10 @@
     <string name="representative">المندوب</string>
     <string name="wearhouse">المستودع</string>
     <string name="status">الحالة</string>
+
+    <string-array name="operator">
+        <item>تسليم بالكامل</item>
+        <item>تسليم جزئي</item>
+        <item>مرتجع بالكامل</item>
+    </string-array>
 </resources>

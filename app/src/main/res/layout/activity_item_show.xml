@@ -74,6 +74,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="العملية" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="عدد الاصناف" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -129,8 +135,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:id="@+id/itemshow_productCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textAlignment="center" />
                 </LinearLayout>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/itemshow_btn_delivered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="تسليم" />
 
             <TextView
                 android:id="@+id/textView21"

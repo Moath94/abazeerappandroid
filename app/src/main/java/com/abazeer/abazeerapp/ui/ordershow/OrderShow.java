@@ -71,7 +71,7 @@ public class OrderShow extends Fragment {
         progress.setCancelable(false);
         recyclerView = root.findViewById(R.id.ordershow_rcvl);
         db = new DatabaseHandler(getContext());
-//        user= db.getUser();
+        user= db.getUser();
         LinearLayoutManager llmanger = new LinearLayoutManager(getContext());
         llmanger.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmanger);
@@ -151,7 +151,7 @@ public class OrderShow extends Fragment {
 //    }
     void getData(){
         progress.show();
-        new RetrofitCon(getContext()).getService().getOrder("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYjYyZmM3NDFmNTM0ZmYxYzlhZDI1YWM5MTJjNmQwODM2NTljNTA2MjNjODNkYjIzYjhmMDQ4NWMyZDA5MzdlOGE5ZGQ1MWI0ZGI1NTAxMjMiLCJpYXQiOjE2MzM3MDA0NzIsIm5iZiI6MTYzMzcwMDQ3MiwiZXhwIjoxNjY1MjM2NDcyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.GZsu1Ct5f3FxFiZJuY2xSnNskgobb532MsUODwLxPZpESDQc9F8MHJJfnr8PFBvDfDBaHVogMWwS86am7gMXkaq7XGbELVioQksj4OVZIiYQk7wOwrbX7Y95ASSG7mxF_50XOtAqbOtecQnP2Q3sIz09aTr6oOlbPdFxeSUcoIJqDNW4vSos_LMdvpURvlaSaDbjMRd3fIHIrNoxMm53vzs5JJsPkGfzVJPc1Wa-w3HKThV7ChixA_yo13VWMcENlIXbQQlfXtQsRTcAJLc-k7Chkk8ZIqU7FXzZwFLJmuJ-e5XRyNIBRZcTaUQPnmZh9LGTyvS6tcxUVBorSzugsWCwfOBih19ZEigPTLhmBVLs5EgQ-nwvklAyxFEWwMs1LxlAds89jOCuBFHuF8rO0fqm6RcMpJjY2U3W1Jfww4hsWuJ2PWBJCS-Z_e2BAKUjEroZeuFzbgvi8f1oLYtkmWRKK8bYHu86RLYQAtk5kBcvoJRvqy-tgt18E7WKAxaHZ1f6jceM9fgd5peCDpEkg1gtRp04ZERTd6Dvw1VQqy7PADKP_1YJe4wBku_XBrUw6hVhhAlDmGy3pDdm3lrR9T7iFairUXUGHg-jfcfpHAXjQ_sZtRhXnIsYx-PJCeU6xWAhkLotxF24mVLuJtjoYH3tnltT47hU9B6x7PKR-Qw").enqueue(new Callback<DataResponse<OrderModel>>() {
+        new RetrofitCon(getContext()).getService().getOrder("Bearer "+user.getAccessToken()).enqueue(new Callback<DataResponse<OrderModel>>() {
             @Override
             public void onResponse(Call<DataResponse<OrderModel>> call, Response<DataResponse<OrderModel>> response) {
                 if (response.isSuccessful()){
@@ -232,9 +232,19 @@ public class OrderShow extends Fragment {
                         Intent intent = new Intent(getContext(), ItemShow.class);
 
                         intent.putExtra("name",val.getName());
-                        intent.putExtra("cnamet",val.getC_name());
-                        intent.putExtra("lname",val.getL_name());
-                        intent.putExtra("rname",val.getR_name());
+                        intent.putExtra("wea_id",val.getId());
+                        intent.putExtra("sa_id",val.getS_id());
+                        intent.putExtra("sa_name",val.getS_name());
+                        intent.putExtra("c_id",val.getC_id());
+                        intent.putExtra("c_name",val.getC_name());
+                        intent.putExtra("l_id",val.getL_id());
+                        intent.putExtra("l_name",val.getL_name());
+                        intent.putExtra("r_id",val.getR_id());
+                        intent.putExtra("r_name",val.getR_name());
+                        intent.putExtra("del_id",val.getDel_id());
+                        intent.putExtra("del_name",val.getDel_name());
+                        intent.putExtra("pt_id",val.getPt_id());
+                        intent.putExtra("pt_name",val.getPt_name());
 
                         startActivity(intent);
                     }

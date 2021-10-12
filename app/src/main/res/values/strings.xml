@@ -19,4 +19,11 @@
     <string name="representative">Representative</string>
     <string name="wearhouse">Wearhouse</string>
     <string name="status">Status</string>
+
+
+    <string-array name="operator">
+        <item>Complete</item>
+        <item>Partially</item>
+        <item>Return All</item>
+    </string-array>
 </resources>

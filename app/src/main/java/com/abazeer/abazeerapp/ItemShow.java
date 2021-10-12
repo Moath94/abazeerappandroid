@@ -9,6 +9,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -16,8 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abazeer.abazeerapp.api.RetrofitCon;
+import com.abazeer.abazeerapp.db.DatabaseHandler;
 import com.abazeer.abazeerapp.model.DataResponse;
 import com.abazeer.abazeerapp.model.OrderItemModel;
+import com.abazeer.abazeerapp.model.UserModel;
 
 import org.json.JSONObject;
 
@@ -45,8 +50,12 @@ public class ItemShow extends AppCompatActivity {
     TextView rename;
     @BindView(R.id.itemshow_wname)
     TextView wname;
+    @BindView(R.id.itemshow_productCount)
+    TextView itemshow_productCount;
     @BindView(R.id.itemshow_spinner_op)
     Spinner spinner;
+    @BindView(R.id.itemshow_btn_delivered)
+    Button delivered_btn;
 
     ArrayList<OrderItemModel> OrderDataModelArrayList;
     private ProgressDialog progress;
@@ -58,12 +67,17 @@ public class ItemShow extends AppCompatActivity {
     String wreft;
     String sreft;
     String finreft;
+
+    DatabaseHandler db;
+    UserModel user;
+    int operator = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_show);
         ButterKnife.bind(this);
-
+        db = new DatabaseHandler(this);
+        user= db.getUser();
         progress = new ProgressDialog(this);
         OrderDataModelArrayList = new ArrayList<>();
         progress.setTitle("Loading");
@@ -84,23 +98,82 @@ public class ItemShow extends AppCompatActivity {
         wname.setText(lname);
 
         getData();
+        spinner(spinner,R.array.operator);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                operator = position;
+                updateBySpinner();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        delivered_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
+    void updateBySpinner(){
+        if (tableLayout.getChildCount() > -1){
+            tableLayout.removeAllViews();
+            showData();
+        }
+    }
     void showData(){
 
 //        OrderDataModelArrayList.addAll(db.getOrders());
+        itemshow_productCount.setText(String.valueOf(OrderDataModelArrayList.size() + 1));
+
+
         for (int i=0;i<OrderDataModelArrayList.size();i++){
             View tableRow = LayoutInflater.from(this).inflate(R.layout.order_table_row,null,false);
+
             TextView ordertr_name  = (TextView) tableRow.findViewById(R.id.ordertr_name);
             TextView ordertr_qty  = (TextView) tableRow.findViewById(R.id.ordertr_qty);
             EditText ordertr_qtyd  = (EditText) tableRow.findViewById(R.id.ordertr_qtyd);
             TextView ordertr_qtyr  = (TextView) tableRow.findViewById(R.id.ordertr_qtyr);
+            TextView ordertr_lot  = (TextView) tableRow.findViewById(R.id.ordertr_lot);
 
             ordertr_name.setText(OrderDataModelArrayList.get(i).getP_name());
-
             ordertr_qty.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-            ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-            ordertr_qtyr.setText(String.valueOf(0));
+            ordertr_lot.setText(OrderDataModelArrayList.get(i).getL_name());
+
+            switch (operator){
+
+                case 0:
+                    ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                    ordertr_qtyd.setEnabled(false);
+                    ordertr_qtyr.setText(String.valueOf(0));
+                    OrderDataModelArrayList.get(i).setQty_return(0);
+
+                    break;
+
+                case 1:
+                    ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                    ordertr_qtyr.setText(String.valueOf(0));
+                    OrderDataModelArrayList.get(i).setQty_return(0);
+
+                    break;
+
+                case 2:
+                    ordertr_qtyd.setText(String.valueOf(0));
+                    ordertr_qtyd.setEnabled(false);
+                    ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                    OrderDataModelArrayList.get(i).setQty_return(OrderDataModelArrayList.get(i).getQty_done());
+
+                    break;
+
+
+            }
+
             int finalI = i;
             ordertr_qtyd.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -112,12 +185,27 @@ public class ItemShow extends AppCompatActivity {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (!charSequence.toString().isEmpty()){
-                       int diff =  OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
+                        int diff = 0;
+                        if (Integer.parseInt(charSequence.toString())<= OrderDataModelArrayList.get(finalI).getQty_done() && Integer.parseInt(charSequence.toString()) >= 0){
+                             diff =  OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
+
+                        }else if (Integer.parseInt(charSequence.toString()) > OrderDataModelArrayList.get(finalI).getQty_done()){
+                            diff = OrderDataModelArrayList.get(finalI).getQty_done();
+                            ordertr_qtyd.setText(String.valueOf(diff));
+
+                        }else if (Integer.parseInt(charSequence.toString()) < 0){
+                            diff = 0;
+                            ordertr_qtyd.setText(String.valueOf(diff));
+
+                        }
                         ordertr_qtyr.setText(String.valueOf(diff));
+                        OrderDataModelArrayList.get(finalI).setQty_return(diff);
 
 
                     }else {
                         ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(finalI).getQty_done()));
+                        OrderDataModelArrayList.get(finalI).setQty_return(OrderDataModelArrayList.get(finalI).getQty_done());
+
                     }
                 }
 
@@ -133,10 +221,13 @@ public class ItemShow extends AppCompatActivity {
 
     }
 
+    void delivered(){
+
+    }
 
     void getData(){
         progress.show();
-        new RetrofitCon(this).getService().getItems("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYjYyZmM3NDFmNTM0ZmYxYzlhZDI1YWM5MTJjNmQwODM2NTljNTA2MjNjODNkYjIzYjhmMDQ4NWMyZDA5MzdlOGE5ZGQ1MWI0ZGI1NTAxMjMiLCJpYXQiOjE2MzM3MDA0NzIsIm5iZiI6MTYzMzcwMDQ3MiwiZXhwIjoxNjY1MjM2NDcyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.GZsu1Ct5f3FxFiZJuY2xSnNskgobb532MsUODwLxPZpESDQc9F8MHJJfnr8PFBvDfDBaHVogMWwS86am7gMXkaq7XGbELVioQksj4OVZIiYQk7wOwrbX7Y95ASSG7mxF_50XOtAqbOtecQnP2Q3sIz09aTr6oOlbPdFxeSUcoIJqDNW4vSos_LMdvpURvlaSaDbjMRd3fIHIrNoxMm53vzs5JJsPkGfzVJPc1Wa-w3HKThV7ChixA_yo13VWMcENlIXbQQlfXtQsRTcAJLc-k7Chkk8ZIqU7FXzZwFLJmuJ-e5XRyNIBRZcTaUQPnmZh9LGTyvS6tcxUVBorSzugsWCwfOBih19ZEigPTLhmBVLs5EgQ-nwvklAyxFEWwMs1LxlAds89jOCuBFHuF8rO0fqm6RcMpJjY2U3W1Jfww4hsWuJ2PWBJCS-Z_e2BAKUjEroZeuFzbgvi8f1oLYtkmWRKK8bYHu86RLYQAtk5kBcvoJRvqy-tgt18E7WKAxaHZ1f6jceM9fgd5peCDpEkg1gtRp04ZERTd6Dvw1VQqy7PADKP_1YJe4wBku_XBrUw6hVhhAlDmGy3pDdm3lrR9T7iFairUXUGHg-jfcfpHAXjQ_sZtRhXnIsYx-PJCeU6xWAhkLotxF24mVLuJtjoYH3tnltT47hU9B6x7PKR-Qw", name).enqueue(new Callback<DataResponse<OrderItemModel>>() {
+        new RetrofitCon(this).getService().getItems("Bearer "+user.getAccessToken(), name).enqueue(new Callback<DataResponse<OrderItemModel>>() {
             @Override
             public void onResponse(Call<DataResponse<OrderItemModel>> call, Response<DataResponse<OrderItemModel>> response) {
                 if (response.isSuccessful()){
@@ -174,5 +265,10 @@ public class ItemShow extends AppCompatActivity {
         });
     }
 
-
+    void spinner(Spinner spinner, int arrayString) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                arrayString, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
 }
