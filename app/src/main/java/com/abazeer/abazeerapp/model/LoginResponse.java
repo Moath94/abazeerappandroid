@@ -19,6 +19,19 @@ public class LoginResponse {
     @SerializedName("accessToken")
     private String accessToken;
 
+    @Expose
+    @SerializedName("isdriver")
+    private int isdriver;
+
+
+    public int getIsdriver() {
+        return isdriver;
+    }
+
+    public void setIsdriver(int isdriver) {
+        this.isdriver = isdriver;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

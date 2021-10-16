@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                 assert response.body() != null;
                                 if (response.body().isSuccess()) {
                                     response.body().getUser().setAccessToken(response.body().getAccessToken());
+                                    response.body().getUser().setIsdriver(response.body().getIsdriver());
                                     Log.e("Users", response.body().getUser().toString() + "");
                                     db.addUser(response.body().getUser());
                                     Intent intent = new Intent(MainActivity.this, SideMenu.class);

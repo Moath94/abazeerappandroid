@@ -3,6 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_add_location.xml" value="0.19519927536231885" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_add_new_return.xml" value="0.15" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_item_show.xml" value="0.22" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_order_show_page.xml" value="0.1" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_retun_item_show.xml" value="0.33" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/app_bar_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/content_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/fragment_gallery.xml" value="0.19519927536231885" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/fragment_home.xml" value="0.19519927536231885" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/order_row.xml" value="0.22" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/order_table_row.xml" value="0.22" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/return_row.xml" value="0.18" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/menu/activity_main_drawer.xml" value="0.20102564102564102" />
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/menu/menu.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/activity_item_show.xml" value="0.2" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/activity_menu.xml" value="0.25" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/app_bar_menu.xml" value="0.1" />

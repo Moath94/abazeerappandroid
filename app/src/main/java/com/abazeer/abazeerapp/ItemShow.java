@@ -82,6 +82,7 @@ public class ItemShow extends AppCompatActivity {
     int l_id;
     int del_id;
     int c_id;
+    int isdelivered;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,7 @@ public class ItemShow extends AppCompatActivity {
         del_id = getIntent().getIntExtra("del_id",0);
         l_id = getIntent().getIntExtra("l_id",0);
         c_id = getIntent().getIntExtra("c_id",0);
+        isdelivered = getIntent().getIntExtra("isdelivered",0);
 
         wref.setText(name);
         saref.setText(sreft);
@@ -129,6 +131,9 @@ public class ItemShow extends AppCompatActivity {
 
             }
         });
+        if (isdelivered == 1){
+            delivered_btn.setEnabled(false);
+        }
         delivered_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,7 +151,7 @@ public class ItemShow extends AppCompatActivity {
     void showData(){
 
 //        OrderDataModelArrayList.addAll(db.getOrders());
-        itemshow_productCount.setText(String.valueOf(OrderDataModelArrayList.size() + 1));
+        itemshow_productCount.setText(String.valueOf(OrderDataModelArrayList.size()));
 
 
         for (int i=0;i<OrderDataModelArrayList.size();i++){

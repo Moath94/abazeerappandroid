@@ -245,6 +245,7 @@ public class OrderShow extends Fragment {
                         intent.putExtra("del_name",val.getDel_name());
                         intent.putExtra("pt_id",val.getPt_id());
                         intent.putExtra("pt_name",val.getPt_name());
+                        intent.putExtra("isdelivered",val.getIsdelivered());
 
                         startActivity(intent);
                     }

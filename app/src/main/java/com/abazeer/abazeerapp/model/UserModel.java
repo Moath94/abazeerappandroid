@@ -38,17 +38,29 @@ public class UserModel {
     @SerializedName("id")
     private int id;
 
+    @Expose
+    @SerializedName("isdriver")
+    private int isdriver;
     private String token;
 
     public UserModel() {
     }
 
-    public UserModel(String accessToken, int id, String job_name, String nameA,String email) {
+    public int getIsdriver() {
+        return isdriver;
+    }
+
+    public void setIsdriver(int isdriver) {
+        this.isdriver = isdriver;
+    }
+
+    public UserModel(String accessToken, int id, String job_name, String nameA, String email, int isdriver) {
         this.accessToken = accessToken;
         this.id = id;
         this.job_name = job_name;
         this.nameA = nameA;
         this.email = email;
+        this.isdriver = isdriver;
     }
 
     public String getToken() {

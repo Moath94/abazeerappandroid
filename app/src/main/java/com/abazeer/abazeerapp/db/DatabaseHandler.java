@@ -32,6 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String NAME = "NAME";
     private static final String EMAIL = "EMAIL";
     private static final String TOKEN = "TOKEN";
+    private static final String ISDRIVER = "ISDRIVER";
 
 
 
@@ -47,7 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String USER_TABLE =  "CREATE TABLE " + USERS + "("
             + ID + " INTEGER PRIMARY KEY," + USER_ID + " INTEGER,"
-            + NAME + " TEXT," + PHONE + " TEXT," + TOKEN + " TEXT," + EMAIL + " TEXT" +")";
+            + NAME + " TEXT," + PHONE + " TEXT," + TOKEN + " TEXT," + EMAIL + " TEXT ," + ISDRIVER + " INTEGER" +")";
 
     private static final String ORDER_TABLE =  "CREATE TABLE " + ORDERS + "("
             + ID + " INTEGER PRIMARY KEY," + USER_ID + " INTEGER, "
@@ -98,6 +99,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(PHONE, userModel.getJob_name());
         values.put(EMAIL, userModel.getEmail());
         values.put(TOKEN, userModel.getAccessToken());
+        values.put(ISDRIVER, userModel.getIsdriver());
 
         // Inserting Row
         db.insert(USERS, null, values);
@@ -165,14 +167,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(USERS, new String[] { NAME,
-                        TOKEN, PHONE,USER_ID,EMAIL }, ID + "=1",
+                        TOKEN, PHONE,USER_ID,EMAIL,ISDRIVER }, ID + "=1",
                 null, null, null, null, null);
         Log.e("ErrorV",cursor.toString());
         if (cursor != null)
             cursor.moveToFirst();
 
         UserModel userModel = new UserModel(cursor.getString(1),Integer.parseInt(cursor.getString(3)),
-                cursor.getString(2), cursor.getString(0),cursor.getString(4));
+                cursor.getString(2), cursor.getString(0),cursor.getString(4),cursor.getInt(5));
         // return contact
         return userModel;
     }

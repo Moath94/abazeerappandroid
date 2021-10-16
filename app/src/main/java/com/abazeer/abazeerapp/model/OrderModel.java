@@ -52,7 +52,17 @@ public class OrderModel {
     @Expose
     @SerializedName("id")
     private int id;
+    @Expose
+    @SerializedName("isdelivered")
+    private int isdelivered;
 
+    public int getIsdelivered() {
+        return isdelivered;
+    }
+
+    public void setIsdelivered(int isdelivered) {
+        this.isdelivered = isdelivered;
+    }
 
     public int getPt_id() {
         return pt_id;

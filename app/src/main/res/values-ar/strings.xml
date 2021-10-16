@@ -15,4 +15,8 @@
         <item>تسليم جزئي</item>
         <item>مرتجع بالكامل</item>
     </string-array>
+    <string name="orders">الطلبات</string>
+    <string name="returns">المرتجعات</string>
+    <string name="menu_gallery">الطلبات</string>
+    <string name="menu_home">المرتجعات</string>
 </resources>
