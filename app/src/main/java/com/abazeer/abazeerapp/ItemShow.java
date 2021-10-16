@@ -22,8 +22,13 @@ import com.abazeer.abazeerapp.api.RetrofitCon;
 import com.abazeer.abazeerapp.db.DatabaseHandler;
 import com.abazeer.abazeerapp.model.DataResponse;
 import com.abazeer.abazeerapp.model.OrderItemModel;
+import com.abazeer.abazeerapp.model.StanderResponse;
 import com.abazeer.abazeerapp.model.UserModel;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -58,6 +63,7 @@ public class ItemShow extends AppCompatActivity {
     Button delivered_btn;
 
     ArrayList<OrderItemModel> OrderDataModelArrayList;
+    ArrayList<OrderItemModel> returnArray;
     private ProgressDialog progress;
 
     String name;
@@ -71,6 +77,11 @@ public class ItemShow extends AppCompatActivity {
     DatabaseHandler db;
     UserModel user;
     int operator = -1;
+    int sa_id;
+    int wea_id;
+    int l_id;
+    int del_id;
+    int c_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +91,20 @@ public class ItemShow extends AppCompatActivity {
         user= db.getUser();
         progress = new ProgressDialog(this);
         OrderDataModelArrayList = new ArrayList<>();
+        returnArray = new ArrayList<>();
         progress.setTitle("Loading");
         progress.setMessage("Wait while loading...");
         progress.setCancelable(false);
         name = getIntent().getStringExtra("name");
-        rname = getIntent().getStringExtra("rname");
-        lname = getIntent().getStringExtra("lname");
-        cnamet = getIntent().getStringExtra("cnamet");
-        sreft = getIntent().getStringExtra("sreft");
-        finreft = getIntent().getStringExtra("finreft");
+        rname = getIntent().getStringExtra("r_name");
+        lname = getIntent().getStringExtra("l_name");
+        cnamet = getIntent().getStringExtra("c_name");
+        sreft = getIntent().getStringExtra("sa_name");
+        sa_id = getIntent().getIntExtra("sa_id", 0);
+        wea_id = getIntent().getIntExtra("wea_id",0);
+        del_id = getIntent().getIntExtra("del_id",0);
+        l_id = getIntent().getIntExtra("l_id",0);
+        c_id = getIntent().getIntExtra("c_id",0);
 
         wref.setText(name);
         saref.setText(sreft);
@@ -116,7 +132,7 @@ public class ItemShow extends AppCompatActivity {
         delivered_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                delivered();
             }
         });
     }
@@ -189,6 +205,7 @@ public class ItemShow extends AppCompatActivity {
                         if (Integer.parseInt(charSequence.toString())<= OrderDataModelArrayList.get(finalI).getQty_done() && Integer.parseInt(charSequence.toString()) >= 0){
                              diff =  OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
 
+
                         }else if (Integer.parseInt(charSequence.toString()) > OrderDataModelArrayList.get(finalI).getQty_done()){
                             diff = OrderDataModelArrayList.get(finalI).getQty_done();
                             ordertr_qtyd.setText(String.valueOf(diff));
@@ -223,6 +240,77 @@ public class ItemShow extends AppCompatActivity {
 
     void delivered(){
 
+        JsonObject order = new JsonObject();
+        order.addProperty("name",name);
+        order.addProperty("s_id",sa_id);
+        order.addProperty("l_id",l_id);
+        order.addProperty("del_id",del_id);
+        order.addProperty("c_id",c_id);
+        order.addProperty("s_name",sreft);
+        JsonObject products = new JsonObject();
+        JsonArray productsArray = new JsonArray();
+        for (int i=0;i<OrderDataModelArrayList.size();i++) {
+            if (OrderDataModelArrayList.get(i).getQty_return() > 0){
+                JsonObject p = new JsonObject();
+
+                p.addProperty("qty_return",OrderDataModelArrayList.get(i).getQty_return());
+                p.addProperty("unit_id",OrderDataModelArrayList.get(i).getUnit_id());
+                p.addProperty("id",OrderDataModelArrayList.get(i).getP_id());
+                p.addProperty("lot_id",OrderDataModelArrayList.get(i).getL_id());
+                p.addProperty("mo_id",OrderDataModelArrayList.get(i).getM_id());
+                p.addProperty("group_id",OrderDataModelArrayList.get(i).getGroup_id());
+
+
+                productsArray.add(p);
+
+
+            }
+
+        }
+
+
+        products.add("products",productsArray);
+//        JSONArray products = new JSONArray();
+
+        JsonObject orders = new JsonObject();
+        orders.add("orders", order);
+        orders.add("products", productsArray);
+
+        new RetrofitCon(this).getService().delivered("Bearer "+user.getAccessToken(),orders).enqueue(new Callback<StanderResponse>() {
+            @Override
+            public void onResponse(Call<StanderResponse> call, Response<StanderResponse> response) {
+                if (response.isSuccessful()){
+                    assert response.body() != null;
+                    if (response.body().isSuccess()){
+
+                        Toast.makeText(ItemShow.this,response.body().getMessage(), Toast.LENGTH_LONG).show();
+
+                        Log.e("E", response.body().getMessage());
+
+                        delivered_btn.setEnabled(false);
+                    }
+                }else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(ItemShow.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
+                        Log.e("E", jObjError.getString("message"));
+
+                    } catch (Exception e) {
+                        Toast.makeText(ItemShow.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("E", e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StanderResponse> call, Throwable t) {
+                if (t.getLocalizedMessage() != null) {
+                    Log.e("ErrorFailure", t.getLocalizedMessage());
+                    progress.dismiss();
+
+                }
+            }
+        });
     }
 
     void getData(){

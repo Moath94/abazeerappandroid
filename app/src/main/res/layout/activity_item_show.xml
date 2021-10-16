@@ -161,7 +161,6 @@
                 android:textStyle="bold" />
 
             <TableLayout
-                android:id="@+id/itemshow_table"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -178,8 +177,16 @@
                         android:textAlignment="textStart" />
 
                     <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="الانتهاء"
+                        android:textAlignment="center" />
+
+                    <TextView
                         android:id="@+id/textView23"
-                        android:layout_width="wrap_content"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="الكمية"
@@ -187,7 +194,7 @@
 
                     <TextView
                         android:id="@+id/textView24"
-                        android:layout_width="30dp"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="المسلمة"
@@ -195,7 +202,7 @@
 
                     <TextView
                         android:id="@+id/textView25"
-                        android:layout_width="wrap_content"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="المرتجعة"
@@ -203,6 +210,14 @@
                 </TableRow>
 
             </TableLayout>
+
+            <TableLayout
+                android:id="@+id/itemshow_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </TableLayout>
+
         </LinearLayout>
     </ScrollView>
 

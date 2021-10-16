@@ -6,6 +6,19 @@ import com.google.gson.annotations.SerializedName;
 public class OrderItemModel {
 
 
+
+    @Expose
+    @SerializedName("unit_name")
+    private String unit_name;
+    @Expose
+    @SerializedName("unit_id")
+    private int unit_id;
+    @Expose
+    @SerializedName("group_name")
+    private String group_name;
+    @Expose
+    @SerializedName("group_id")
+    private int group_id;
     @Expose
     @SerializedName("m_name")
     private String m_name;
@@ -36,6 +49,38 @@ public class OrderItemModel {
     @Expose
     @SerializedName("id")
     private int id;
+
+    public String getUnit_name() {
+        return unit_name;
+    }
+
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
+    }
+
+    public int getUnit_id() {
+        return unit_id;
+    }
+
+    public void setUnit_id(int unit_id) {
+        this.unit_id = unit_id;
+    }
+
+    public String getGroup_name() {
+        return group_name;
+    }
+
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public int getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
+    }
 
     public int getQty_return() {
         return qty_return;
