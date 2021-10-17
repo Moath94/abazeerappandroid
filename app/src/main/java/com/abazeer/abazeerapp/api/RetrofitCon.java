@@ -10,8 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitCon {
     private static Retrofit retrofit;
-//    private static String BASE_URL ="http://192.168.1.184/1abazeerlaravel/public/api/";
-    private static String BASE_URL ="http://192.168.8.108/1abazeerlaravel/public/api/";
+    private static String BASE_URL ="http://192.168.1.184/1abazeerlaravel/public/api/";
+//    private static String BASE_URL ="http://192.168.8.108/1abazeerlaravel/public/api/";
     private static APIInterface api;
     private Context context;
 

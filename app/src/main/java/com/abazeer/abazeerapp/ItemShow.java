@@ -325,13 +325,17 @@ public class ItemShow extends AppCompatActivity {
             public void onResponse(Call<DataResponse<OrderItemModel>> call, Response<DataResponse<OrderItemModel>> response) {
                 if (response.isSuccessful()){
                     if (response.body().isSuccess()){
-                        progress.show();
+                        if (response.body().getDatas().size() > 0) {
+                            progress.show();
 
-                        OrderDataModelArrayList.clear();
+                            OrderDataModelArrayList.clear();
 
-                        OrderDataModelArrayList.addAll(response.body().getDatas());
+                            OrderDataModelArrayList.addAll(response.body().getDatas());
 
-                        showData();
+                            showData();
+                        }else {
+                            Toast.makeText(ItemShow.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        }
 
                     }
                 }else {
