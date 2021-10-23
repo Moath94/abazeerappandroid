@@ -27,6 +27,33 @@ public class ReturnOrderModel {
     @SerializedName("id")
     private int id;
 
+    private int id_database;
+    private int item_count;
+    private int status;
+
+    public int getId_database() {
+        return id_database;
+    }
+
+    public void setId_database(int id_database) {
+        this.id_database = id_database;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getItem_count() {
+        return item_count;
+    }
+
+    public void setItem_count(int item_count) {
+        this.item_count = item_count;
+    }
 
     public String getName() {
         return name;

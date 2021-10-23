@@ -6,6 +6,14 @@ import com.google.gson.annotations.SerializedName;
 public class ReturnItemModel {
 
 
+
+    private String barcode;
+    private int unit_id;
+    private int return_id;
+    private String unit_name;
+    private int id_database;
+
+
     @Expose
     @SerializedName("lot_name")
     private String lot_name;
@@ -33,6 +41,40 @@ public class ReturnItemModel {
     @Expose
     @SerializedName("id")
     private int id;
+
+
+    public int getReturn_id() {
+        return return_id;
+    }
+
+    public void setReturn_id(int return_id) {
+        this.return_id = return_id;
+    }
+
+    public int getUnit_id() {
+        return unit_id;
+    }
+
+    public void setUnit_id(int unit_id) {
+        this.unit_id = unit_id;
+    }
+
+    public String getUnit_name() {
+        return unit_name;
+    }
+
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
 
     public String getLot_name() {
         return lot_name;
@@ -104,5 +146,13 @@ public class ReturnItemModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId_database() {
+        return id_database;
+    }
+
+    public void setId_database(int id_database) {
+        this.id_database = id_database;
     }
 }
