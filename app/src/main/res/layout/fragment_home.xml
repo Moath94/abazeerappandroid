@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/returnorder_rcvl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/returnshow_addbtn"
             android:layout_width="match_parent"
@@ -19,11 +24,6 @@
             android:layout_margin="10dp"
             android:clickable="true"
             android:src="@android:drawable/ic_input_add" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/returnorder_rcvl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </FrameLayout>
 
 </LinearLayout>

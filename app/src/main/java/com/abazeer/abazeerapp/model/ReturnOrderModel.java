@@ -9,6 +9,9 @@ public class ReturnOrderModel {
     @SerializedName("x_name")
     private String name;
     @Expose
+    @SerializedName("x_studio_abz_status")
+    private String statusOdoo;
+    @Expose
     @SerializedName("warehouse_name")
     private String warehouse_name;
     @Expose
@@ -30,6 +33,14 @@ public class ReturnOrderModel {
     private int id_database;
     private int item_count;
     private int status;
+
+    public String getStatusOdoo() {
+        return statusOdoo;
+    }
+
+    public void setStatusOdoo(String statusOdoo) {
+        this.statusOdoo = statusOdoo;
+    }
 
     public int getId_database() {
         return id_database;

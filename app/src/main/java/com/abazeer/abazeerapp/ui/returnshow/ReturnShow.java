@@ -33,11 +33,14 @@ import com.abazeer.abazeerapp.model.OrderModel;
 import com.abazeer.abazeerapp.model.ReturnOrderModel;
 import com.abazeer.abazeerapp.model.UserModel;
 import com.abazeer.abazeerapp.ui.ordershow.OrderShow;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,6 +58,8 @@ public class ReturnShow extends Fragment {
     DatabaseHandler db;
     UserModel user;
     private ProgressDialog progress;
+    FloatingActionButton returnshow_addbtn;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -62,11 +67,13 @@ public class ReturnShow extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        ButterKnife.bind(root);
         progress = new ProgressDialog(getContext());
         progress.setTitle("Loading");
         progress.setMessage("Wait while loading...");
         progress.setCancelable(false);
         recyclerView = root.findViewById(R.id.returnorder_rcvl);
+        returnshow_addbtn = root.findViewById(R.id.returnshow_addbtn);
         db = new DatabaseHandler(getContext());
         user= db.getUser();
         LinearLayoutManager llmanger = new LinearLayoutManager(getContext());
@@ -82,6 +89,14 @@ public class ReturnShow extends Fragment {
 
                 Intent intent = new Intent(getContext(), AddNewReturn.class);
 
+                startActivity(intent);
+            }
+        });
+        returnshow_addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ReturnItemShow.class);
+                intent.putExtra("state","new");
                 startActivity(intent);
             }
         });
@@ -169,7 +184,7 @@ public class ReturnShow extends Fragment {
                 adapterHolder.repres.setText(val.getX_studio_abz_rep_name());
                 adapterHolder.customer.setText(val.getPartner_name());
                 adapterHolder.wearhouse.setText(val.getWarehouse_name());
-//                adapterHolder.status.setText(String.valueOf(val.getId()));
+                adapterHolder.status.setText(val.getStatusOdoo());
 
                 adapterHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -181,6 +196,7 @@ public class ReturnShow extends Fragment {
                         intent.putExtra("p_name",val.getPartner_name());
                         intent.putExtra("r_name",val.getX_studio_abz_rep_name());
                         intent.putExtra("return_id",val.getId());
+                        intent.putExtra("state",val.getStatusOdoo());
 
 
                         startActivity(intent);

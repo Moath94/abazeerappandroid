@@ -4,15 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,12 +16,10 @@ import android.widget.Toast;
 import com.abazeer.abazeerapp.api.RetrofitCon;
 import com.abazeer.abazeerapp.db.DatabaseHandler;
 import com.abazeer.abazeerapp.model.DataResponse;
-import com.abazeer.abazeerapp.model.OrderItemModel;
 import com.abazeer.abazeerapp.model.ReturnItemModel;
-import com.abazeer.abazeerapp.model.StanderResponse;
 import com.abazeer.abazeerapp.model.UserModel;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import org.json.JSONObject;
 
@@ -41,6 +35,16 @@ public class ReturnItemShow extends AppCompatActivity {
 
     @BindView(R.id.returnitem_table)
     TableLayout tableLayout;
+    @BindView(R.id.returnitem_table_layout)
+    LinearLayout returnitem_table_layout;
+    @BindView(R.id.returnitem_customer_layout)
+    LinearLayout returnitem_customer_layout;
+    @BindView(R.id.returnitem_main_layout)
+    LinearLayout returnitem_main_layout;
+    @BindView(R.id.returnitem_additembtn)
+    FloatingActionButton returnitem_additembtn;
+    @BindView(R.id.returnitem_create_return)
+    Button returnitem_create_return;
     @BindView(R.id.returnitem_cname)
     TextView cname;
     @BindView(R.id.returnitem_repname)
@@ -60,11 +64,13 @@ public class ReturnItemShow extends AppCompatActivity {
     String w_name;
     String p_name;
     String r_name;
+    String state;
 
     DatabaseHandler db;
     UserModel user;
 
-    int return_id;
+    int return_id = 0;
+    int return_id_d = 0;
 
 
     @Override
@@ -72,8 +78,24 @@ public class ReturnItemShow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retun_item_show);
         ButterKnife.bind(this);
+        state = getIntent().getStringExtra("state");
+        if (!state.isEmpty()) {
+
+            if (state.equals("new")) {
+                if (return_id_d == 0) {
+                    returnitem_customer_layout.setVisibility(View.VISIBLE);
+                    returnitem_additembtn.setVisibility(View.GONE);
+                }
+            }
+            if (state.equals("dreciving")) {
+                if (return_id_d == 0) {
+                    returnitem_customer_layout.setVisibility(View.GONE);
+                    returnitem_additembtn.setVisibility(View.VISIBLE);
+                }
+            }
+        }
         db = new DatabaseHandler(this);
-        user= db.getUser();
+        user = db.getUser();
         progress = new ProgressDialog(this);
         OrderDataModelArrayList = new ArrayList<>();
         returnArray = new ArrayList<>();
@@ -84,7 +106,7 @@ public class ReturnItemShow extends AppCompatActivity {
         w_name = getIntent().getStringExtra("w_name");
         p_name = getIntent().getStringExtra("p_name");
         r_name = getIntent().getStringExtra("r_name");
-        return_id = getIntent().getIntExtra("return_id",0);
+        return_id = getIntent().getIntExtra("return_id", 0);
 
         namet.setText(name);
         warename.setText(w_name);
@@ -95,21 +117,21 @@ public class ReturnItemShow extends AppCompatActivity {
     }
 
 
-    void showData(){
+    void showData() {
 
 //        OrderDataModelArrayList.addAll(db.getOrders());
         returnitem_pcount.setText(String.valueOf(OrderDataModelArrayList.size()));
 
 
-        for (int i=0;i<OrderDataModelArrayList.size();i++){
-            View tableRow = LayoutInflater.from(this).inflate(R.layout.return_row,null,false);
+        for (int i = 0; i < OrderDataModelArrayList.size(); i++) {
+            View tableRow = LayoutInflater.from(this).inflate(R.layout.return_row, null, false);
 
-            TextView p_name  = (TextView) tableRow.findViewById(R.id.returnrow_product);
-            TextView ex_name  = (TextView) tableRow.findViewById(R.id.returnrow_exdate);
-            TextView qtyv  = (TextView) tableRow.findViewById(R.id.returnrow_qtyv);
-            TextView qtyd  = (TextView) tableRow.findViewById(R.id.returnrow_qtyd);
-            TextView qtyex  = (TextView) tableRow.findViewById(R.id.returnrow_qtyex);
-            TextView total  = (TextView) tableRow.findViewById(R.id.returnrow_total);
+            TextView p_name = (TextView) tableRow.findViewById(R.id.returnrow_product);
+            TextView ex_name = (TextView) tableRow.findViewById(R.id.returnrow_exdate);
+            TextView qtyv = (TextView) tableRow.findViewById(R.id.returnrow_qtyv);
+            TextView qtyd = (TextView) tableRow.findViewById(R.id.returnrow_qtyd);
+            TextView qtyex = (TextView) tableRow.findViewById(R.id.returnrow_qtyex);
+            TextView total = (TextView) tableRow.findViewById(R.id.returnrow_total);
 
             p_name.setText(OrderDataModelArrayList.get(i).getProduct_name());
             ex_name.setText(OrderDataModelArrayList.get(i).getLot_name());
@@ -117,7 +139,6 @@ public class ReturnItemShow extends AppCompatActivity {
             qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getX_studio_abz_product_damaged_driver()));
             qtyex.setText(String.valueOf(OrderDataModelArrayList.get(i).getX_studio_abz_product_exp_driver()));
             total.setText(String.valueOf(OrderDataModelArrayList.get(i).getX_studio_abz_total_qty_driver()));
-
 
 
             tableLayout.addView(tableRow);
@@ -128,14 +149,13 @@ public class ReturnItemShow extends AppCompatActivity {
     }
 
 
-
-    void getData(){
+    void getData() {
         progress.show();
-        new RetrofitCon(this).getService().getReturnsItems("Bearer "+user.getAccessToken(), return_id).enqueue(new Callback<DataResponse<ReturnItemModel>>() {
+        new RetrofitCon(this).getService().getReturnsItems("Bearer " + user.getAccessToken(), return_id).enqueue(new Callback<DataResponse<ReturnItemModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ReturnItemModel>> call, Response<DataResponse<ReturnItemModel>> response) {
-                if (response.isSuccessful()){
-                    if (response.body().isSuccess()){
+                if (response.isSuccessful()) {
+                    if (response.body().isSuccess()) {
                         progress.show();
 
                         OrderDataModelArrayList.clear();
@@ -145,7 +165,7 @@ public class ReturnItemShow extends AppCompatActivity {
                         showData();
 
                     }
-                }else {
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(ReturnItemShow.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();

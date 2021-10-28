@@ -83,13 +83,14 @@ public class ItemShow extends AppCompatActivity {
     int del_id;
     int c_id;
     int isdelivered;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_show);
         ButterKnife.bind(this);
         db = new DatabaseHandler(this);
-        user= db.getUser();
+        user = db.getUser();
         progress = new ProgressDialog(this);
         OrderDataModelArrayList = new ArrayList<>();
         returnArray = new ArrayList<>();
@@ -102,11 +103,11 @@ public class ItemShow extends AppCompatActivity {
         cnamet = getIntent().getStringExtra("c_name");
         sreft = getIntent().getStringExtra("sa_name");
         sa_id = getIntent().getIntExtra("sa_id", 0);
-        wea_id = getIntent().getIntExtra("wea_id",0);
-        del_id = getIntent().getIntExtra("del_id",0);
-        l_id = getIntent().getIntExtra("l_id",0);
-        c_id = getIntent().getIntExtra("c_id",0);
-        isdelivered = getIntent().getIntExtra("isdelivered",0);
+        wea_id = getIntent().getIntExtra("wea_id", 0);
+        del_id = getIntent().getIntExtra("del_id", 0);
+        l_id = getIntent().getIntExtra("l_id", 0);
+        c_id = getIntent().getIntExtra("c_id", 0);
+        isdelivered = getIntent().getIntExtra("isdelivered", 0);
 
         wref.setText(name);
         saref.setText(sreft);
@@ -116,7 +117,7 @@ public class ItemShow extends AppCompatActivity {
         wname.setText(lname);
 
         getData();
-        spinner(spinner,R.array.operator);
+        spinner(spinner, R.array.operator);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -131,7 +132,7 @@ public class ItemShow extends AppCompatActivity {
 
             }
         });
-        if (isdelivered == 1){
+        if (isdelivered == 1) {
             delivered_btn.setEnabled(false);
         }
         delivered_btn.setOnClickListener(new View.OnClickListener() {
@@ -142,128 +143,145 @@ public class ItemShow extends AppCompatActivity {
         });
     }
 
-    void updateBySpinner(){
-        if (tableLayout.getChildCount() > -1){
+    void updateBySpinner() {
+        if (tableLayout.getChildCount() > -1) {
             tableLayout.removeAllViews();
             showData();
         }
     }
-    void showData(){
+
+    void showData() {
 
 //        OrderDataModelArrayList.addAll(db.getOrders());
         itemshow_productCount.setText(String.valueOf(OrderDataModelArrayList.size()));
 
 
-        for (int i=0;i<OrderDataModelArrayList.size();i++){
-            View tableRow = LayoutInflater.from(this).inflate(R.layout.order_table_row,null,false);
+        for (int i = 0; i < OrderDataModelArrayList.size(); i++) {
+            View tableRow = LayoutInflater.from(this).inflate(R.layout.order_table_row, null, false);
 
-            TextView ordertr_name  = (TextView) tableRow.findViewById(R.id.ordertr_name);
-            TextView ordertr_qty  = (TextView) tableRow.findViewById(R.id.ordertr_qty);
-            EditText ordertr_qtyd  = (EditText) tableRow.findViewById(R.id.ordertr_qtyd);
-            TextView ordertr_qtyr  = (TextView) tableRow.findViewById(R.id.ordertr_qtyr);
-            TextView ordertr_lot  = (TextView) tableRow.findViewById(R.id.ordertr_lot);
+            TextView ordertr_name = (TextView) tableRow.findViewById(R.id.ordertr_name);
+            TextView ordertr_qty = (TextView) tableRow.findViewById(R.id.ordertr_qty);
+            EditText ordertr_qtyd = (EditText) tableRow.findViewById(R.id.ordertr_qtyd);
+            TextView ordertr_qtyr = (TextView) tableRow.findViewById(R.id.ordertr_qtyr);
+            TextView ordertr_lot = (TextView) tableRow.findViewById(R.id.ordertr_lot);
+            TextView ordertr_qtyd_text = (TextView) tableRow.findViewById(R.id.ordertr_qtyd_text);
+            int sizetable = tableLayout.getChildCount();
 
-            ordertr_name.setText(OrderDataModelArrayList.get(i).getP_name());
-            ordertr_qty.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-            ordertr_lot.setText(OrderDataModelArrayList.get(i).getL_name());
+            if (sizetable == 0) {
+                ordertr_qtyd.setVisibility(View.GONE);
+                ordertr_qtyd_text.setVisibility(View.VISIBLE);
 
-            switch (operator){
-
-                case 0:
-                    ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-                    ordertr_qtyd.setEnabled(false);
-                    ordertr_qtyr.setText(String.valueOf(0));
-                    OrderDataModelArrayList.get(i).setQty_return(0);
-
-                    break;
-
-                case 1:
-                    ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-                    ordertr_qtyr.setText(String.valueOf(0));
-                    OrderDataModelArrayList.get(i).setQty_return(0);
-
-                    break;
-
-                case 2:
-                    ordertr_qtyd.setText(String.valueOf(0));
-                    ordertr_qtyd.setEnabled(false);
-                    ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
-                    OrderDataModelArrayList.get(i).setQty_return(OrderDataModelArrayList.get(i).getQty_done());
-
-                    break;
+                ordertr_name.setText("Product");
+                ordertr_name.setWidth(100);
+                ordertr_lot.setText("ExDate");
+                ordertr_qty.setText("Qty");
+                ordertr_qtyd_text.setText("DQty");
+                ordertr_qtyr.setText("RQty");
+            } else {
 
 
-            }
+                ordertr_name.setText(OrderDataModelArrayList.get(i).getP_name());
+                ordertr_qty.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                ordertr_lot.setText(OrderDataModelArrayList.get(i).getL_name());
 
-            int finalI = i;
-            ordertr_qtyd.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                switch (operator) {
+
+                    case 0:
+                        ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                        ordertr_qtyd.setEnabled(false);
+                        ordertr_qtyr.setText(String.valueOf(0));
+                        OrderDataModelArrayList.get(i).setQty_return(0);
+
+                        break;
+
+                    case 1:
+                        ordertr_qtyd.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                        ordertr_qtyr.setText(String.valueOf(0));
+                        OrderDataModelArrayList.get(i).setQty_return(0);
+
+                        break;
+
+                    case 2:
+                        ordertr_qtyd.setText(String.valueOf(0));
+                        ordertr_qtyd.setEnabled(false);
+                        ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(i).getQty_done()));
+                        OrderDataModelArrayList.get(i).setQty_return(OrderDataModelArrayList.get(i).getQty_done());
+
+                        break;
+
 
                 }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    if (!charSequence.toString().isEmpty()){
-                        int diff = 0;
-                        if (Integer.parseInt(charSequence.toString())<= OrderDataModelArrayList.get(finalI).getQty_done() && Integer.parseInt(charSequence.toString()) >= 0){
-                             diff =  OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
-
-
-                        }else if (Integer.parseInt(charSequence.toString()) > OrderDataModelArrayList.get(finalI).getQty_done()){
-                            diff = OrderDataModelArrayList.get(finalI).getQty_done();
-                            ordertr_qtyd.setText(String.valueOf(diff));
-
-                        }else if (Integer.parseInt(charSequence.toString()) < 0){
-                            diff = 0;
-                            ordertr_qtyd.setText(String.valueOf(diff));
-
-                        }
-                        ordertr_qtyr.setText(String.valueOf(diff));
-                        OrderDataModelArrayList.get(finalI).setQty_return(diff);
-
-
-                    }else {
-                        ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(finalI).getQty_done()));
-                        OrderDataModelArrayList.get(finalI).setQty_return(OrderDataModelArrayList.get(finalI).getQty_done());
+                int finalI = i;
+                ordertr_qtyd.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
-                }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
-            });
-            tableLayout.addView(tableRow);
-        }
+                        if (!charSequence.toString().isEmpty()) {
+                            int diff = 0;
+                            if (Integer.parseInt(charSequence.toString()) <= OrderDataModelArrayList.get(finalI).getQty_done() && Integer.parseInt(charSequence.toString()) >= 0) {
+                                diff = OrderDataModelArrayList.get(finalI).getQty_done() - Integer.parseInt(charSequence.toString());
+
+
+                            } else if (Integer.parseInt(charSequence.toString()) > OrderDataModelArrayList.get(finalI).getQty_done()) {
+                                diff = OrderDataModelArrayList.get(finalI).getQty_done();
+                                ordertr_qtyd.setText(String.valueOf(diff));
+
+                            } else if (Integer.parseInt(charSequence.toString()) < 0) {
+                                diff = 0;
+                                ordertr_qtyd.setText(String.valueOf(diff));
+
+                            }
+                            ordertr_qtyr.setText(String.valueOf(diff));
+                            OrderDataModelArrayList.get(finalI).setQty_return(diff);
+
+
+                        } else {
+                            ordertr_qtyr.setText(String.valueOf(OrderDataModelArrayList.get(finalI).getQty_done()));
+                            OrderDataModelArrayList.get(finalI).setQty_return(OrderDataModelArrayList.get(finalI).getQty_done());
+
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+                tableLayout.addView(tableRow);
+            }
 //        OrderDataModelAdapter.notifyDataSetChanged();
 
 
+        }
     }
 
-    void delivered(){
+    void delivered() {
 
         JsonObject order = new JsonObject();
-        order.addProperty("name",name);
-        order.addProperty("s_id",sa_id);
-        order.addProperty("l_id",l_id);
-        order.addProperty("del_id",del_id);
-        order.addProperty("c_id",c_id);
-        order.addProperty("s_name",sreft);
+        order.addProperty("name", name);
+        order.addProperty("s_id", sa_id);
+        order.addProperty("l_id", l_id);
+        order.addProperty("del_id", del_id);
+        order.addProperty("c_id", c_id);
+        order.addProperty("s_name", sreft);
         JsonObject products = new JsonObject();
         JsonArray productsArray = new JsonArray();
-        for (int i=0;i<OrderDataModelArrayList.size();i++) {
-            if (OrderDataModelArrayList.get(i).getQty_return() > 0){
+        for (int i = 0; i < OrderDataModelArrayList.size(); i++) {
+            if (OrderDataModelArrayList.get(i).getQty_return() > 0) {
                 JsonObject p = new JsonObject();
 
-                p.addProperty("qty_return",OrderDataModelArrayList.get(i).getQty_return());
-                p.addProperty("unit_id",OrderDataModelArrayList.get(i).getUnit_id());
-                p.addProperty("id",OrderDataModelArrayList.get(i).getP_id());
-                p.addProperty("lot_id",OrderDataModelArrayList.get(i).getL_id());
-                p.addProperty("mo_id",OrderDataModelArrayList.get(i).getM_id());
-                p.addProperty("group_id",OrderDataModelArrayList.get(i).getGroup_id());
+                p.addProperty("qty_return", OrderDataModelArrayList.get(i).getQty_return());
+                p.addProperty("unit_id", OrderDataModelArrayList.get(i).getUnit_id());
+                p.addProperty("id", OrderDataModelArrayList.get(i).getP_id());
+                p.addProperty("lot_id", OrderDataModelArrayList.get(i).getL_id());
+                p.addProperty("mo_id", OrderDataModelArrayList.get(i).getM_id());
+                p.addProperty("group_id", OrderDataModelArrayList.get(i).getGroup_id());
 
 
                 productsArray.add(p);
@@ -274,27 +292,27 @@ public class ItemShow extends AppCompatActivity {
         }
 
 
-        products.add("products",productsArray);
+        products.add("products", productsArray);
 //        JSONArray products = new JSONArray();
 
         JsonObject orders = new JsonObject();
         orders.add("orders", order);
         orders.add("products", productsArray);
 
-        new RetrofitCon(this).getService().delivered("Bearer "+user.getAccessToken(),orders).enqueue(new Callback<StanderResponse>() {
+        new RetrofitCon(this).getService().delivered("Bearer " + user.getAccessToken(), orders).enqueue(new Callback<StanderResponse>() {
             @Override
             public void onResponse(Call<StanderResponse> call, Response<StanderResponse> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     assert response.body() != null;
-                    if (response.body().isSuccess()){
+                    if (response.body().isSuccess()) {
 
-                        Toast.makeText(ItemShow.this,response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ItemShow.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
                         Log.e("E", response.body().getMessage());
 
                         delivered_btn.setEnabled(false);
                     }
-                }else {
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(ItemShow.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
@@ -318,13 +336,13 @@ public class ItemShow extends AppCompatActivity {
         });
     }
 
-    void getData(){
+    void getData() {
         progress.show();
-        new RetrofitCon(this).getService().getItems("Bearer "+user.getAccessToken(), name).enqueue(new Callback<DataResponse<OrderItemModel>>() {
+        new RetrofitCon(this).getService().getItems("Bearer " + user.getAccessToken(), name).enqueue(new Callback<DataResponse<OrderItemModel>>() {
             @Override
             public void onResponse(Call<DataResponse<OrderItemModel>> call, Response<DataResponse<OrderItemModel>> response) {
-                if (response.isSuccessful()){
-                    if (response.body().isSuccess()){
+                if (response.isSuccessful()) {
+                    if (response.body().isSuccess()) {
                         if (response.body().getDatas().size() > 0) {
                             progress.show();
 
@@ -333,12 +351,12 @@ public class ItemShow extends AppCompatActivity {
                             OrderDataModelArrayList.addAll(response.body().getDatas());
 
                             showData();
-                        }else {
+                        } else {
                             Toast.makeText(ItemShow.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                         }
 
                     }
-                }else {
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(ItemShow.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
