@@ -70,6 +70,9 @@ public interface APIInterface {
     @GET("zone")
     Call<DataResponse<ZoneModel>> zone(@Header("Authorization") String Authorization);
     @Headers("Accept: application/json")
+    @GET("odoolocations")
+    Call<DataResponse<ZoneModel>> getOdooLocation(@Header("Authorization") String Authorization);
+    @Headers("Accept: application/json")
     @GET("year")
     Call<DataResponse<YearModel>> year(@Header("Authorization") String Authorization);
 

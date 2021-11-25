@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Abazeerapp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".LocationPage"
+            android:exported="false" />
+        <activity
             android:name=".AddNewReturn"
             android:exported="true" />
         <activity
@@ -29,6 +32,10 @@
         <activity
             android:name=".OrderShowPage"
             android:exported="true" />
+        <activity
+            android:name=".AddLocation"
+            android:exported="true" />
+
         <activity
             android:name=".SideMenu"
             android:exported="true"
