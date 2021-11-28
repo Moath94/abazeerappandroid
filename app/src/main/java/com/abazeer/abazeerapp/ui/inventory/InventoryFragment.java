@@ -102,7 +102,7 @@ public class InventoryFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), LocationPage.class);
-                        intent.putExtra("id", val.getId());
+                        intent.putExtra("id", Integer.valueOf(val.getCode()));
                         intent.putExtra("name", val.getName_zone());
 
                         startActivity(intent);
@@ -167,7 +167,8 @@ public class InventoryFragment extends Fragment {
     private void getData() {
         progress.show();
         zoneModelArrayList.clear();
-        new RetrofitCon(getContext()).getService().zone("Bearer "+user.getAccessToken()).enqueue(new Callback<DataResponse<ZoneModel>>() {
+
+        new RetrofitCon(getContext()).getService().getOdooLocation("Bearer "+user.getAccessToken()).enqueue(new Callback<DataResponse<ZoneModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ZoneModel>> call, Response<DataResponse<ZoneModel>> response) {
                 if (response.isSuccessful()){
@@ -181,8 +182,10 @@ public class InventoryFragment extends Fragment {
                     }
                 }else {
                     try {
+
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(getContext(), jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Log.e("ApiError",jObjError.getString("message"));
                     } catch (Exception e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -197,7 +200,6 @@ public class InventoryFragment extends Fragment {
                     progress.dismiss();
 
                 }
-
             }
         });
     }

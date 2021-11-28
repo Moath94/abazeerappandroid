@@ -69,9 +69,12 @@ public interface APIInterface {
     @Headers("Accept: application/json")
     @GET("zone")
     Call<DataResponse<ZoneModel>> zone(@Header("Authorization") String Authorization);
+
     @Headers("Accept: application/json")
-    @GET("odoolocations")
+    @GET("odoolocation")
     Call<DataResponse<ZoneModel>> getOdooLocation(@Header("Authorization") String Authorization);
+
+
     @Headers("Accept: application/json")
     @GET("year")
     Call<DataResponse<YearModel>> year(@Header("Authorization") String Authorization);
@@ -79,6 +82,11 @@ public interface APIInterface {
     @Headers("Accept: application/json")
     @GET("zone/{zone}")
     Call<DataResponse<LocationModel>> location(@Header("Authorization") String Authorization, @Path("zone") int zone);
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @POST("invind")
+    Call<DataResponse<LocationModel>> getOdooLocationZone(@Header("Authorization") String Authorization, @Field("odoo_location") int location);
 
     @Headers("Accept: application/json")
     @GET("location/{location}")

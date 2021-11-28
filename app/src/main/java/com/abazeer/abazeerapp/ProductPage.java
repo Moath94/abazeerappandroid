@@ -126,7 +126,7 @@ public class ProductPage extends AppCompatActivity {
                 }else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(ProductPage.this, jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProductPage.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(ProductPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }

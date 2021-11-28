@@ -35,7 +35,9 @@
         <activity
             android:name=".AddLocation"
             android:exported="true" />
-
+        <activity
+            android:name=".ProductPage"
+            android:exported="true" />
         <activity
             android:name=".SideMenu"
             android:exported="true"

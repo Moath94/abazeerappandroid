@@ -91,7 +91,7 @@ public class LocationPage extends AppCompatActivity {
     void getData(){
         progress.show();
         locationModelArrayList.clear();
-        new RetrofitCon(this).getService().location("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<LocationModel>>() {
+        new RetrofitCon(this).getService().getOdooLocationZone("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<LocationModel>>() {
             @Override
             public void onResponse(Call<DataResponse<LocationModel>> call, Response<DataResponse<LocationModel>> response) {
                 if (response.isSuccessful()){
@@ -106,7 +106,7 @@ public class LocationPage extends AppCompatActivity {
                 }else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(LocationPage.this, jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LocationPage.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(LocationPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -121,10 +121,10 @@ public class LocationPage extends AppCompatActivity {
                     progress.dismiss();
 
                 }
-
             }
         });
     }
+
     private void search() {
         ArrayList<LocationModel> filteredList = new ArrayList<>();
 
