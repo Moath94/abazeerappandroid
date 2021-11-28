@@ -51,8 +51,8 @@ public class AddLocation extends AppCompatActivity {
         progress.setMessage("Wait while loading...");
         progress.setCancelable(false);
         db = new DatabaseHandler(this);
-        user= db.getUser();
-        id = getIntent().getIntExtra("id",0);
+        user = db.getUser();
+        id = getIntent().getIntExtra("id", 0);
         storagename = getIntent().getStringExtra("name");
 
         zonename.setText(storagename);
@@ -60,30 +60,32 @@ public class AddLocation extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (name.getText().toString().isEmpty()){
+                if (name.getText().toString().isEmpty()) {
                     name.setError("الرجاء ادخال الاسم");
                     name.requestFocus();
-                }else {
+                } else {
                     progress.show();
 
-                    new RetrofitCon(AddLocation.this).getService().addlocation("Bearer "+user.getAccessToken(),name.getText().toString().trim(),id).enqueue(new Callback<DataResponse<LocationModel>>() {
+                    new RetrofitCon(AddLocation.this).getService().addlocation("Bearer " + user.getAccessToken(), name.getText().toString().trim(), id).enqueue(new Callback<DataResponse<LocationModel>>() {
                         @Override
                         public void onResponse(Call<DataResponse<LocationModel>> call, Response<DataResponse<LocationModel>> response) {
-                            if (response.body().isSuccess()) {
+                            if (response.isSuccessful()) {
+                                if (response.body().isSuccess()) {
 //                        textView.setText(response.body().getData().get(0).getName_zone()+"dfg");
-                                Log.e("Response", response.body().getData().getName() + "dfg");
-                                Intent intent = new Intent(AddLocation.this, ProductPage.class);
-                                intent.putExtra("id",response.body().getData().getId());
-                                intent.putExtra("location_name",response.body().getData().getName());
-                                intent.putExtra("zone_name",storagename);
-                                startActivity(intent);
-                                finish();
+                                    Log.e("Response", response.body().getData().getName() + "dfg");
+                                    Intent intent = new Intent(AddLocation.this, ProductPage.class);
+                                    intent.putExtra("id", response.body().getData().getId());
+                                    intent.putExtra("location_name", response.body().getData().getName());
+                                    intent.putExtra("zone_name", storagename);
+                                    startActivity(intent);
+                                    finish();
+                                }
                             } else {
 
                                 {
                                     try {
                                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                        Toast.makeText(AddLocation.this, jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(AddLocation.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
                                     } catch (Exception e) {
                                         Toast.makeText(AddLocation.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                     }

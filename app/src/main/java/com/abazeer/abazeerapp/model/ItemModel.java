@@ -43,6 +43,12 @@ public class ItemModel {
     @SerializedName("createby_id")
     private int createby_id;
     @Expose
+    @SerializedName("delete_id")
+    private int delete_id;
+    @Expose
+    @SerializedName("delete_by")
+    private String delete_by;
+    @Expose
     @SerializedName("checkby")
     private String checkby;
     @Expose
@@ -53,6 +59,46 @@ public class ItemModel {
     @Expose
     @SerializedName("id")
     private int id;
+
+    @Expose
+    @SerializedName("lot_id")
+    private int lot_id;
+    @Expose
+    @SerializedName("lot_name")
+    private String lot_name;
+
+
+    public int getDelete_id() {
+        return delete_id;
+    }
+
+    public void setDelete_id(int delete_id) {
+        this.delete_id = delete_id;
+    }
+
+    public String getDelete_by() {
+        return delete_by;
+    }
+
+    public void setDelete_by(String delete_by) {
+        this.delete_by = delete_by;
+    }
+
+    public int getLot_id() {
+        return lot_id;
+    }
+
+    public void setLot_id(int lot_id) {
+        this.lot_id = lot_id;
+    }
+
+    public String getLot_name() {
+        return lot_name;
+    }
+
+    public void setLot_name(String lot_name) {
+        this.lot_name = lot_name;
+    }
 
     public int getCreateby_id() {
         return createby_id;

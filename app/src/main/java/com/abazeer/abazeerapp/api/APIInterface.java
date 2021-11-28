@@ -112,6 +112,7 @@ public interface APIInterface {
                                                  @Field("odoo_location_id") int odoo_location_id);
 
 
+
     @PUT("inventory/{inventory}")
     Call<DataResponse<ProductModel>> updateproducts(@Header("Authorization") String Authorization, @Path("inventory") int id,@Body JsonObject data);
     @DELETE("inventory/{inventory}")
@@ -120,4 +121,33 @@ public interface APIInterface {
     @Headers("Accept: application/json")
     @GET("inventory/{inventory}")
     Call<DataResponse<ItemModel>> product(@Header("Authorization") String Authorization, @Path("inventory") int inventory);
+
+    @Headers("Accept: application/json")
+    @FormUrlEncoded
+    @POST("odoocountquantity")
+    Call<DataResponse<ProductModel>> addproductsodoo(@Header("Authorization") String Authorization,
+                                                 @Field("location_id") int location,
+                                                 @Field("expirydate") String expirydate,
+                                                 @Field("product_id") int product_id,
+                                                 @Field("product_name") String product_name,
+                                                 @Field("description") String description,
+                                                 @Field("quantity") String quantity,
+                                                 @Field("quantitycheck") int quantitycheck,
+                                                 @Field("unit_name") String unit_name,
+                                                 @Field("unit_id") int unit_id,
+                                                 @Field("lot_id") int lot_id,
+                                                 @Field("lot_name") String lot_name,
+                                                 @Field("odoo_location_id") int odoo_location_id);
+
+
+    @Headers("Accept: application/json")
+//    @FormUrlEncoded
+    @PUT("odoocountquantity/{odoocountquantity}")
+    Call<DataResponse<ProductModel>> updateproductsodoo(@Header("Authorization") String Authorization, @Path("odoocountquantity") int id,@Body JsonObject data);
+    @DELETE("odoocountquantity/{odoocountquantity}")
+    Call<DataResponse<ProductModel>> deleteproductsodoo(@Header("Authorization") String Authorization, @Path("odoocountquantity") int id);
+
+    @Headers("Accept: application/json")
+    @GET("odoocountquantity/{odoocountquantity}")
+    Call<DataResponse<ItemModel>> productodoo(@Header("Authorization") String Authorization, @Path("odoocountquantity") int inventory);
 }

@@ -341,15 +341,14 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
                 Toast.makeText(this, "يرجى تحديد الصنف", Toast.LENGTH_LONG).show();
 
             } else {
-                if (lotsArrayList.size() > 0 && expiry.isEmpty()) {
-                    String smonth = "";
-                    String sday = "";
+                if (lot > 0 && expiry.isEmpty()) {
+
 
                     if (lot_postion != 0) {
                         if (!quantity.isEmpty()) {
                             progress.show();
 
-                            new RetrofitCon(this).getService().addproducts("Bearer " +
+                            new RetrofitCon(this).getService().addproductsodoo("Bearer " +
                                             user.getAccessToken(),
                                     location_id,
                                     expiry,
@@ -434,7 +433,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
 
                         progress.show();
 
-                        new RetrofitCon(this).getService().addproducts("Bearer " +
+                        new RetrofitCon(this).getService().addproductsodoo("Bearer " +
                                         user.getAccessToken(),
                                 location_id,
                                 expiry,

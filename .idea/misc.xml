@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Nasser Hobani/Desktop/MGithub/abazeerappandroid/app/src/main/res/layout/activity_product_info_page.xml" value="0.25" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/activity_item_show.xml" value="0.2" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/activity_menu.xml" value="0.25" />
         <entry key="..\:/Users/Nasser Hobani/Desktop/abazeerappandroid/app/src/main/res/layout/app_bar_menu.xml" value="0.1" />
@@ -26,7 +27,6 @@
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/activity_add_new_return.xml" value="0.25" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/activity_item_show.xml" value="0.33" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/activity_location_page.xml" value="0.1" />
-        <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/activity_product_page.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/activity_retun_item_show.xml" value="0.2" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/fragment_home.xml" value="0.1875" />
@@ -34,7 +34,6 @@
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/order_row.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/order_table_row.xml" value="0.22" />
-        <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/layout/product_row.xml" value="0.33" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/menu/activity_main_drawer.xml" value="0.22" />
         <entry key="..\:/Users/USER/Desktop/github/abazeerappandroid/app/src/main/res/menu/menu.xml" value="0.1" />
       </map>

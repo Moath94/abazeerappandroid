@@ -33,7 +33,7 @@ public  class ProductsModel {
     @SerializedName("id")
     private int id;
     @Expose
-    @SerializedName("lot")
+    @SerializedName("tracking")
     private int lot;
 
 

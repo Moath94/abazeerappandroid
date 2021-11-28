@@ -39,6 +39,7 @@ public class ProductInfoPage extends AppCompatActivity {
     @BindView(R.id.productinfo_createdat) TextView createdat;
     @BindView(R.id.productinfo_updatedat) TextView updatedat;
     @BindView(R.id.productinfo_checkby) TextView updatedby;
+    @BindView(R.id.productinfo_deleted_by) TextView deletedby;
     @BindView(R.id.productinfo_quantity) EditText quantity;
     @BindView(R.id.productinfo_quantitycheck) EditText quantityCheck;
     @BindView(R.id.productinfo_matching) TextView matching;
@@ -72,7 +73,7 @@ public class ProductInfoPage extends AppCompatActivity {
         id = getIntent().getIntExtra("id",0);
         progress.show();
 
-        new RetrofitCon(this).getService().product("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<ItemModel>>() {
+        new RetrofitCon(this).getService().productodoo("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<ItemModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ItemModel>> call, Response<DataResponse<ItemModel>> response) {
                 if (response.isSuccessful()){
@@ -85,13 +86,16 @@ public class ProductInfoPage extends AppCompatActivity {
                         barcode.setText(String.valueOf(response.body().getData().getProduct_barcode()));
                         createdat.setText(response.body().getData().getCreated_at());
                         createdby.setText(response.body().getData().getCreateby());
-                        expiry.setText(response.body().getData().getExpirydate());
+                        expiry.setText(response.body().getData().getLot_name());
                         quantity.setText(String.valueOf(response.body().getData().getQuantity()));
                         quantityCheck.setText(String.valueOf(response.body().getData().getQuantitycheck()));
                         note.setText(response.body().getData().getDescription());
 
+
                         updatedat.setText(response.body().getData().getUpdated_at());
                         updatedby.setText(response.body().getData().getCheckby());
+                        deletedby.setText(response.body().getData().getDelete_by());
+
 
                         double q = response.body().getData().getQuantity() - response.body().getData().getQuantitycheck();
                         if (q == 0){
@@ -121,7 +125,7 @@ public class ProductInfoPage extends AppCompatActivity {
                 }else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(ProductInfoPage.this, jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProductInfoPage.this, jObjError.getString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(ProductInfoPage.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -145,7 +149,7 @@ public class ProductInfoPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 JsonObject jsonObject = new JsonObject();
-                if (itemModel.getCreateby().equals(user.getNameA())){
+                if (itemModel.getCreateby_id() == user.getId()){
                     if (!quantity.getText().toString().equals(String.valueOf(itemModel.getQuantity()))){
                         if (quantity.getText().toString().isEmpty() || quantity.getText().toString().equals("0")){
                             quantity.requestFocus();
@@ -203,7 +207,7 @@ public class ProductInfoPage extends AppCompatActivity {
     void updateData(JsonObject jsonObject){
         progress.show();
 
-        new RetrofitCon(this).getService().updateproducts("Bearer "+user.getAccessToken(),id,jsonObject).enqueue(new Callback<DataResponse<ProductModel>>() {
+        new RetrofitCon(this).getService().updateproductsodoo("Bearer "+user.getAccessToken(),id,jsonObject).enqueue(new Callback<DataResponse<ProductModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ProductModel>> call, Response<DataResponse<ProductModel>> response) {
                 if (response.isSuccessful()){
@@ -236,7 +240,7 @@ public class ProductInfoPage extends AppCompatActivity {
     void deleteData(){
         progress.show();
 
-        new RetrofitCon(this).getService().deleteproducts("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<ProductModel>>() {
+        new RetrofitCon(this).getService().deleteproductsodoo("Bearer "+user.getAccessToken(),id).enqueue(new Callback<DataResponse<ProductModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ProductModel>> call, Response<DataResponse<ProductModel>> response) {
                 if (response.isSuccessful()){
