@@ -200,6 +200,7 @@ public class LocationPage extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(LocationPage.this, ProductPage.class);
                         intent.putExtra("id",val.getId());
+                        intent.putExtra("odoo_location_id",id);
                         intent.putExtra("location_name",val.getName());
                         intent.putExtra("zone_name",name);
                         startActivity(intent);

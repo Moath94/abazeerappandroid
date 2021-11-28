@@ -18,6 +18,12 @@ public  class ProductsModel {
     @SerializedName("barcode")
     private BigDecimal barcode;
     @Expose
+    @SerializedName("unit_name")
+    private String unit_name;
+    @Expose
+    @SerializedName("unit_id")
+    private int unit_id;
+    @Expose
     @SerializedName("name")
     private String name;
     @Expose
@@ -36,6 +42,9 @@ public  class ProductsModel {
 
     public static class Lots {
         @Expose
+        @SerializedName("odoo_id")
+        private int odoo_id;
+        @Expose
         @SerializedName("product_id")
         private int product_id;
         @Expose
@@ -50,6 +59,14 @@ public  class ProductsModel {
         }
 
         public Lots() {
+        }
+
+        public int getOdoo_id() {
+            return odoo_id;
+        }
+
+        public void setOdoo_id(int odoo_id) {
+            this.odoo_id = odoo_id;
         }
 
         public int getProduct_id() {
@@ -75,6 +92,22 @@ public  class ProductsModel {
         public void setId(int id) {
             this.id = id;
         }
+    }
+
+    public String getUnit_name() {
+        return unit_name;
+    }
+
+    public void setUnit_name(String unit_name) {
+        this.unit_name = unit_name;
+    }
+
+    public int getUnit_id() {
+        return unit_id;
+    }
+
+    public void setUnit_id(int unit_id) {
+        this.unit_id = unit_id;
     }
 
     public String getSize() {

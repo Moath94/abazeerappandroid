@@ -23,8 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abazeer.abazeerapp.R;
 import com.abazeer.abazeerapp.adapter.Adapter;
 import com.abazeer.abazeerapp.api.RetrofitCon;
+import com.abazeer.abazeerapp.db.DatabaseHandler;
 import com.abazeer.abazeerapp.model.DataResponse;
 import com.abazeer.abazeerapp.model.ProductsModel;
+import com.abazeer.abazeerapp.model.UserModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -52,6 +54,8 @@ public class SearchProductFr extends AppCompatDialogFragment {
     ArrayList<ProductsModel> arrayList;
     RecyclerView recyclerView;
     SearchView searchView;
+    DatabaseHandler db;
+    UserModel user;
    private getProductData lisener;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -100,6 +104,9 @@ public class SearchProductFr extends AppCompatDialogFragment {
         llmanger.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llmanger);
         rcvl(arrayList);
+        db = new DatabaseHandler(getContext());
+
+        user= db.getUser();
 
         builder.setView(view);
         builder.setTitle("البحث عن منتج");
@@ -132,8 +139,7 @@ public class SearchProductFr extends AppCompatDialogFragment {
     void getData(String q){
         progress.show();
 
-        new RetrofitCon(getContext()).getService().searchproduct("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMjI3N2M4N2U1ZDQ1NDIwOTViYjY1ZGIzODRkN2Q5ZTU3YTUyNWNlOTQxMTc5NDhlMDE0OTIxZjI5N2JlYmM5ZWYwMTkyNzFkN2ZhNmI2MzkiLCJpYXQiOjE2MTI5MDEwMjcsIm5iZiI6MTYxMjkwMTAyNywiZXhwIjoxNjQ0NDM3MDI3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Go0IpdKp9coWiYOIKO8emPkV9WsIVRkJlMw3SkGzAiY0e2ftwIhHaJmDALSkvQIdG1FJFLHykh4sIS7XAGXtgwRe9p_8n-TIPnO4v7nGQCMFM_r7eiC6wp6A8JufzO8f8wdES-8Ufef17ddvZsX41782M8rk25Oz1TOQSevYwsi1mEQhInps4IJ5L_TkiXIxrHSxjVfG2npBU7e3Hf1HS0H1TMcXcsJFKA3_FXK0rXW5ijKyxNUTu7j-O6yHpBhlR9qm9czyqVx6wsyfPm90DLItU1AYncNCTP1n23JqkP1Oh4otRlYvI6zVsizO8qSSGjKa9KggHmKKFknUdn5fP8Lvi-_LjVtvt879FnBgPC4Hh_Zv02yXz8qvs9ujc-zrULlLFnrjfmE0zyM9qoRKmaKYj-5APrYlqYUud6IaDKtWOrkhc2uZcOLy8S8LRvhtDp5rmvwnbQNPi4GNsp1mcWEiPG0TLx1xD7rGnOGQED1NYHE7zIc" +
-                "KSnglyujNQDDL4ificIFH6mZJEMVUKK0DaMWm0cW0DrCKlin1vjpHWecHpj3sjrblSjDsqOTOlzqKo2ZOxEbq22DgQzFvWDp-XJ5zFH26IOOoBIWX-9fcP47t0TB_e5JWy9h7v2MMUJN3BrQns3haG3zf0Zp--_ssGwU4NHucvV782KXQtYQAVww",q).enqueue(new Callback<DataResponse<ProductsModel>>() {
+        new RetrofitCon(getContext()).getService().searchproduct("Bearer "+user.getAccessToken(),q).enqueue(new Callback<DataResponse<ProductsModel>>() {
             @Override
             public void onResponse(Call<DataResponse<ProductsModel>> call, Response<DataResponse<ProductsModel>> response) {
 
@@ -215,8 +221,8 @@ public class SearchProductFr extends AppCompatDialogFragment {
         lisener = (getProductData) context;
     }
     public interface getProductData{
-        void productdata(String barcode, int id, String name, int lot, ArrayList<ProductsModel.Lots> lots);
-        void productdata(String barcode, int id, String name, int lot);
+        void productdata(String barcode, int id, String name, int lot,int unit_id,String unit_name, ArrayList<ProductsModel.Lots> lots);
+        void productdata(String barcode, int id, String name, int lot,int unit_id,String unit_name);
 
     }
     public void rcvl(ArrayList<ProductsModel> arrayList) {
@@ -236,7 +242,13 @@ public class SearchProductFr extends AppCompatDialogFragment {
 
                 adapterHolder.id.setText(String.valueOf(val.getId()));
                 adapterHolder.name.setText(val.getName());
-                adapterHolder.size.setText(val.getSize());
+//                if (val.getSize() == null){
+                    adapterHolder.size.setText(val.getUnit_name());
+
+//                }else {
+//                    adapterHolder.size.setText(val.getSize());
+//
+//                }
                 adapterHolder.barcode.setText(String.valueOf(val.getBarcode()));
 
                 adapterHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -247,11 +259,11 @@ public class SearchProductFr extends AppCompatDialogFragment {
 //                        intent.putExtra("barcode",val.getBarcode());
 //                        intent.putExtra("id",val.getId());
 //                        Log.e("Lots",val.getLots().get(1).getName());
-                        if (val.getLot() == 0){
-                            lisener.productdata(String.valueOf(val.getBarcode()),val.getId(),val.getName(),val.getLot());
+                        if (val.getLots().size() == 0){
+                            lisener.productdata(String.valueOf(val.getBarcode()),val.getId(),val.getName(),val.getLot(),val.getUnit_id(),val.getUnit_name());
 
                         }else {
-                            lisener.productdata(String.valueOf(val.getBarcode()),val.getId(),val.getName(),val.getLot(), (ArrayList<ProductsModel.Lots>) val.getLots());
+                            lisener.productdata(String.valueOf(val.getBarcode()),val.getId(),val.getName(),val.getLot(),val.getUnit_id(),val.getUnit_name(), (ArrayList<ProductsModel.Lots>) val.getLots());
 
                         }
                         dismiss();

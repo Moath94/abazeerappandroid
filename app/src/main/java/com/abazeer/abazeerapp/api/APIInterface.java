@@ -66,6 +66,7 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("location")
     Call<DataResponse<LocationModel>> addlocation(@Header("Authorization") String Authorization, @Field("name") String name, @Field("zone_id") int zone_id);
+
     @Headers("Accept: application/json")
     @GET("zone")
     Call<DataResponse<ZoneModel>> zone(@Header("Authorization") String Authorization);
@@ -96,9 +97,19 @@ public interface APIInterface {
     @Headers("Accept: application/json")
     @FormUrlEncoded
     @POST("inventory")
-    Call<DataResponse<ProductModel>> addproducts(@Header("Authorization") String Authorization, @Field("location_id") int location
-            ,@Field("expirydate") String expirydate, @Field("product_id") int product_id,@Field("description") String description,
-                                                 @Field("quantity") String quantity,@Field("quantitycheck") int quantitycheck);
+    Call<DataResponse<ProductModel>> addproducts(@Header("Authorization") String Authorization,
+                                                 @Field("location_id") int location,
+                                                 @Field("expirydate") String expirydate,
+                                                 @Field("product_id") int product_id,
+                                                 @Field("product_name") String product_name,
+                                                 @Field("description") String description,
+                                                 @Field("quantity") String quantity,
+                                                 @Field("quantitycheck") int quantitycheck,
+                                                 @Field("unit_name") String unit_name,
+                                                 @Field("unit_id") int unit_id,
+                                                 @Field("lot_id") int lot_id,
+                                                 @Field("lot_name") String lot_name,
+                                                 @Field("odoo_location_id") int odoo_location_id);
 
 
     @PUT("inventory/{inventory}")

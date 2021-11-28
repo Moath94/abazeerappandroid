@@ -74,8 +74,8 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
     ArrayList<YearModel> yearModelArrayList;
     ArrayList<ProductsModel.Lots> lotsArrayList;
 
-    String expiry, location_name;
-    int year, daysInMonth, month, lot, day, location_id, product_id = 0;
+    String expiry, location_name,lot_name,unit_name;
+    int year, daysInMonth, month, lot, day, location_id, product_id, lot_postion,lot_id,unit_id,odoo_location_id = 0;
     DatabaseHandler db;
     UserModel user;
     private ProgressDialog progress;
@@ -93,10 +93,11 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
             layoutdate.setVisibility(View.GONE);
         }
         db = new DatabaseHandler(this);
-        user= db.getUser();
+        user = db.getUser();
         lotsArrayList = new ArrayList<>();
 
         location_id = getIntent().getIntExtra("id", 0);
+        odoo_location_id = getIntent().getIntExtra("odoo_location_id", 0);
         location_name = getIntent().getStringExtra("name");
         layoutdatee.setVisibility(View.INVISIBLE);
 
@@ -221,25 +222,28 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
         spexistdate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
-                    spyear.setEnabled(true);
+//                if (position == 0) {
+//                    spyear.setEnabled(true);
+//
+//                    Toast.makeText(AddProductPage.this, lotsArrayList.get(position).getName(), Toast.LENGTH_LONG).show();
+//                    expiry = "";
+//                    layoutdatee.setVisibility(View.VISIBLE);
+//                }
+//                else if (position > 1){
+                Toast.makeText(AddProductPage.this, lotsArrayList.get(position).getName(), Toast.LENGTH_LONG).show();
 
-                    Toast.makeText(AddProductPage.this, lotsArrayList.get(position).getName(), Toast.LENGTH_LONG).show();
-                    expiry = "";
-                    layoutdatee.setVisibility(View.VISIBLE);
-                } else if (position > 1){
-                    Toast.makeText(AddProductPage.this, lotsArrayList.get(position).getName(), Toast.LENGTH_LONG).show();
+                expiry = lotsArrayList.get(position).getName();
+                lot_name = lotsArrayList.get(position).getName();
+                lot_id = lotsArrayList.get(position).getOdoo_id();
+                spyear.setEnabled(false);
+                layoutdatee.setVisibility(View.INVISIBLE);
 
-                    expiry = lotsArrayList.get(position).getName();
-                    spyear.setEnabled(false);
-                    layoutdatee.setVisibility(View.INVISIBLE);
-
-                }else {
-                    spyear.setEnabled(false);
-                    expiry = "";
-                    layoutdatee.setVisibility(View.INVISIBLE);
-
-                }
+//                }else {
+//                    spyear.setEnabled(false);
+//                    expiry = "";
+//                    layoutdatee.setVisibility(View.INVISIBLE);
+//
+//                }
             }
 
             @Override
@@ -268,7 +272,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
     private void getYear() {
         progress.show();
 
-        new RetrofitCon(this).getService().year("Bearer "+user.getAccessToken()).enqueue(new Callback<DataResponse<YearModel>>() {
+        new RetrofitCon(this).getService().year("Bearer " + user.getAccessToken()).enqueue(new Callback<DataResponse<YearModel>>() {
             @Override
             public void onResponse(Call<DataResponse<YearModel>> call, Response<DataResponse<YearModel>> response) {
                 if (response.isSuccessful()) {
@@ -325,108 +329,98 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
 
     private void save() {
         String quantity = "0";
-        if (!quantityin.getText().toString().isEmpty()){
+        if (!quantityin.getText().toString().isEmpty()) {
             quantity = quantityin.getText().toString();
         }
-        if (Float.parseFloat(quantity) <=0 ){
+        if (Float.parseFloat(quantity) <= 0) {
             Toast.makeText(this, "لابد ان تكون الكمية المجرودة اكبر من صفر", Toast.LENGTH_LONG).show();
             quantityin.setError("الكمية اكبر من صفر");
             quantityin.requestFocus();
-        }else {
+        } else {
             if (product_id <= 0) {
                 Toast.makeText(this, "يرجى تحديد الصنف", Toast.LENGTH_LONG).show();
 
             } else {
-                if (lot > 0 && expiry.isEmpty()) {
+                if (lotsArrayList.size() > 0 && expiry.isEmpty()) {
                     String smonth = "";
                     String sday = "";
-                    if (day > 0 && month > 0 && year > 0) {
-                        if (day < 10) {
 
-                            sday = "0" + day;
-                        }
-                        if (month < 10) {
-                            smonth = "0" + month;
-                        }
-                        expiry = "";
-                        if (sday.isEmpty() && smonth.isEmpty()){
-                            expiry = day + "/" + month + "/" + year;
+                    if (lot_postion != 0) {
+                        if (!quantity.isEmpty()) {
+                            progress.show();
 
-                        }else {
-                            if (sday.isEmpty()){
-                                sday = String.valueOf(day);
-                            }
-                            if (smonth.isEmpty()){
-                                smonth = String.valueOf(month);
-                            }
-                            expiry = sday + "/" + smonth + "/" + year;
+                            new RetrofitCon(this).getService().addproducts("Bearer " +
+                                            user.getAccessToken(),
+                                    location_id,
+                                    expiry,
+                                    product_id,
+                                    productname.getText().toString(),
+                                    note.getText().toString(),
+                                    quantity,
+                                    0,unit_name,unit_id,lot_id,lot_name,odoo_location_id).enqueue(new Callback<DataResponse<ProductModel>>() {
+                                @Override
+                                public void onResponse(Call<DataResponse<ProductModel>> call, Response<DataResponse<ProductModel>> response) {
 
-                        }
-                        if (!expiry.isEmpty() && !expiry.equals(null) && !expiry.equals("")) {
-                            if (!quantity.isEmpty()) {
-                                progress.show();
+                                    if (response.isSuccessful()) {
+                                        if (response.body().isSuccess()) {
 
-                                new RetrofitCon(this).getService().addproducts("Bearer "+user.getAccessToken(),
-                                        location_id, expiry, product_id, note.getText().toString(), quantity, 0).enqueue(new Callback<DataResponse<ProductModel>>() {
-                                    @Override
-                                    public void onResponse(Call<DataResponse<ProductModel>> call, Response<DataResponse<ProductModel>> response) {
+                                            spyear.setEnabled(false);
+                                            spday.setEnabled(false);
+                                            spmonth.setEnabled(false);
 
-                                        if (response.isSuccessful()) {
-                                            if (response.body().isSuccess()) {
+                                            spexistdate.setSelection(0);
+                                            spmonth.setSelection(0);
+                                            spyear.setSelection(0);
+                                            expiry = "";
+                                            product_id = 0;
+                                            note.setText("");
+                                            quantityin.setText("");
+                                            barcode.setText("");
+                                            productname.setText("");
+                                            year = 0;
+                                            daysInMonth = 0;
+                                            month = 0;
+                                            lot = 0;
+                                            day = 0;
+                                            lot_id = 0;
+                                            lot_name = "";
+                                            unit_id = 0;
+                                            unit_name = "";
+                                            chdate.setChecked(false);
 
-                                                spyear.setEnabled(false);
-                                                spday.setEnabled(false);
-                                                spmonth.setEnabled(false);
-
-                                                spexistdate.setSelection(0);
-                                                spmonth.setSelection(0);
-                                                spyear.setSelection(0);
-                                                expiry = "";
-                                                product_id = 0;
-                                                note.setText("");
-                                                quantityin.setText("");
-                                                barcode.setText("");
-                                                productname.setText("");
-                                                year=0; daysInMonth=0; month=0; lot=0; day=0;
-                                                chdate.setChecked(false);
-
-                                            } else {
-                                                Log.e("ResponseCodActive", response.code() + "");
-
-                                            }
                                         } else {
-                                            if (response.errorBody() != null) {
-                                                Log.e("ResponseCodActive", response.code() + "/" + expiry + "/" + product_id);
-                                                JSONObject jsonObj = null;
-                                                try {
-                                                    jsonObj = new JSONObject(response.errorBody().string());
-                                                    Log.e("ErrorRes", jsonObj.toString());
-                                                    Toast.makeText(AddProductPage.this, jsonObj.getString("message"), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(AddProductPage.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
-                                                } catch (JSONException | IOException e) {
-                                                    e.printStackTrace();
-                                                }
+                                        }
+                                    } else {
+                                        if (response.errorBody() != null) {
+                                            Log.e("ResponseCodActive", response.code() + "/" + expiry + "/" + product_id);
+                                            JSONObject jsonObj = null;
+                                            try {
+                                                jsonObj = new JSONObject(response.errorBody().string());
+                                                Log.e("ErrorRes", jsonObj.toString());
+                                                Toast.makeText(AddProductPage.this, jsonObj.getString("message"), Toast.LENGTH_LONG).show();
+
+                                            } catch (JSONException | IOException e) {
+                                                e.printStackTrace();
                                             }
                                         }
-                                        progress.dismiss();
-
                                     }
+                                    progress.dismiss();
 
-                                    @Override
-                                    public void onFailure(Call<DataResponse<ProductModel>> call, Throwable t) {
-                                        Log.e("ErrorRes", t.getLocalizedMessage());
-                                        progress.dismiss();
+                                }
 
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(this, "يرجى تحديد الكمية المجرودة", Toast.LENGTH_LONG).show();
-                                quantityin.setError("يرجى تحديد الكمية المجرودة");
-                                quantityin.requestFocus();
+                                @Override
+                                public void onFailure(Call<DataResponse<ProductModel>> call, Throwable t) {
+                                    Log.e("ErrorRes", t.getLocalizedMessage());
+                                    progress.dismiss();
 
-                            }
+                                }
+                            });
                         } else {
-                            Toast.makeText(this, "يرجى اختيار التاريخ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "يرجى تحديد الكمية المجرودة", Toast.LENGTH_LONG).show();
+                            quantityin.setError("يرجى تحديد الكمية المجرودة");
+                            quantityin.requestFocus();
 
                         }
                     } else {
@@ -434,13 +428,21 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
 
                     }
 
+
                 } else {
                     if (!quantity.isEmpty()) {
 
                         progress.show();
 
-                        new RetrofitCon(this).getService().addproducts("Bearer "+user.getAccessToken(),
-                                location_id, expiry, product_id, note.getText().toString(), quantity, 0).enqueue(new Callback<DataResponse<ProductModel>>() {
+                        new RetrofitCon(this).getService().addproducts("Bearer " +
+                                        user.getAccessToken(),
+                                location_id,
+                                expiry,
+                                product_id,
+                                productname.getText().toString(),
+                                note.getText().toString(),
+                                quantity,
+                                0,unit_name,unit_id,lot_id,lot_name,odoo_location_id).enqueue(new Callback<DataResponse<ProductModel>>() {
                             @Override
                             public void onResponse(Call<DataResponse<ProductModel>> call, Response<DataResponse<ProductModel>> response) {
 
@@ -460,7 +462,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
                                         chdate.setChecked(false);
 
                                     } else {
-                                        Log.e("ResponseCodActive", response.code() + "");
+                                        Toast.makeText(AddProductPage.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
 
                                     }
                                 } else {
@@ -469,7 +471,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
                                         JSONObject jsonObj = null;
                                         try {
                                             jsonObj = new JSONObject(response.errorBody().string());
-                                            Log.e("ErrorRes", jsonObj.toString());
+                                            Log.e("ErrorRes", jsonObj.getString("message"));
                                             Toast.makeText(AddProductPage.this, jsonObj.getString("message"), Toast.LENGTH_LONG).show();
 
                                         } catch (JSONException | IOException e) {
@@ -501,7 +503,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
     }
 
     @Override
-    public void productdata(String barcode, int id, String name, int lot, ArrayList<ProductsModel.Lots> lotsArrayList) {
+    public void productdata(String barcode, int id, String name, int lot,int unit_id,String unit_name, ArrayList<ProductsModel.Lots> lotsArrayList) {
 
         this.barcode.setText(String.valueOf(barcode));
         this.productname.setText(name);
@@ -510,46 +512,49 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
         this.lot = lot;
         product_id = id;
 
-        if (lot == 1) {
-            this.lotsArrayList.clear();
-            layoutdate.setVisibility(View.VISIBLE);
-            chdate.setChecked(true);
+        this.unit_id = unit_id;
+        this.unit_name = unit_name;
+//        if (lot == 1) {
+        this.lotsArrayList.clear();
+        layoutdate.setVisibility(View.VISIBLE);
+        chdate.setChecked(true);
 
 
-            lotsArrayList.add(0, new ProductsModel.Lots("اختر التاريخ المناسب"));
-            lotsArrayList.add(1, new ProductsModel.Lots("انشاء تاريخ جديد"));
-            this.lotsArrayList.addAll(lotsArrayList);
-            String[] stringArrayList = new String[lotsArrayList.size()];
-            for (int i = 0; i < lotsArrayList.size(); i++) {
-                Log.e("Error", lotsArrayList.get(i).getName());
-                stringArrayList[i] = lotsArrayList.get(i).getName();
-            }
-            spinner(stringArrayList, spexistdate);
-
-        } else {
-            layoutdate.setVisibility(View.GONE);
-            chdate.setChecked(false);
+        lotsArrayList.add(0, new ProductsModel.Lots("اختر التاريخ المناسب"));
+//            lotsArrayList.add(1, new ProductsModel.Lots("انشاء تاريخ جديد"));
+        this.lotsArrayList.addAll(lotsArrayList);
+        String[] stringArrayList = new String[lotsArrayList.size()];
+        for (int i = 0; i < lotsArrayList.size(); i++) {
+            Log.e("Error", lotsArrayList.get(i).getName());
+            stringArrayList[i] = lotsArrayList.get(i).getName();
         }
+        spinner(stringArrayList, spexistdate);
+
+//        } else {
+//            layoutdate.setVisibility(View.GONE);
+//            chdate.setChecked(false);
+//        }
 
     }
 
     @Override
-    public void productdata(String barcode, int id, String name, int lot) {
+    public void productdata(String barcode, int id, String name, int lot,int unit_id,String unit_name) {
         this.barcode.setText(String.valueOf(barcode));
         this.productname.setText(name);
 
         this.lot = lot;
         product_id = id;
+        this.unit_id = unit_id;
+        this.unit_name = unit_name;
+//        if (lot == 1) {
+        layoutdate.setVisibility(View.VISIBLE);
+        chdate.setChecked(true);
 
-        if (lot == 1) {
-            layoutdate.setVisibility(View.VISIBLE);
-            chdate.setChecked(true);
 
-
-        } else {
-            layoutdate.setVisibility(View.GONE);
-            chdate.setChecked(false);
-        }
+//        } else {
+        layoutdate.setVisibility(View.GONE);
+        chdate.setChecked(false);
+//        }
     }
 
 

@@ -39,6 +39,12 @@
             android:name=".ProductPage"
             android:exported="true" />
         <activity
+            android:name=".ProductInfoPage"
+            android:exported="true" />
+        <activity
+            android:name=".AddProductPage"
+            android:exported="true" />
+        <activity
             android:name=".SideMenu"
             android:exported="true"
             android:label="@string/title_activity_menu"

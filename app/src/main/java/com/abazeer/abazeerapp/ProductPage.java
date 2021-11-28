@@ -56,7 +56,7 @@ public class ProductPage extends AppCompatActivity {
     Spinner spinner;
     @BindView(R.id.productpage_add)
     FloatingActionButton add;
-    private int searchByy;
+    private int searchByy,odoo_location_id;
     DatabaseHandler db;
     UserModel user;
     ProgressDialog progress;
@@ -79,6 +79,7 @@ public class ProductPage extends AppCompatActivity {
         rcvl(productModelArrayList);
 
         id = getIntent().getIntExtra("id",0);
+        odoo_location_id = getIntent().getIntExtra("odoo_location_id",0);
         name = getIntent().getStringExtra("location_name");
         setTitle(name);
         search();
@@ -89,6 +90,7 @@ public class ProductPage extends AppCompatActivity {
 
                 intent.putExtra("id",id);
                 intent.putExtra("name",name);
+                intent.putExtra("odoo_location_id",odoo_location_id);
                 startActivity(intent);
             }
         });
