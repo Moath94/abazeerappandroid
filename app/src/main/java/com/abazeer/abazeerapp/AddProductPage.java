@@ -235,6 +235,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
                 expiry = lotsArrayList.get(position).getName();
                 lot_name = lotsArrayList.get(position).getName();
                 lot_id = lotsArrayList.get(position).getOdoo_id();
+                lot_postion = position;
                 spyear.setEnabled(false);
                 layoutdatee.setVisibility(View.INVISIBLE);
 
@@ -341,7 +342,7 @@ public class AddProductPage extends AppCompatActivity implements SearchProductFr
                 Toast.makeText(this, "يرجى تحديد الصنف", Toast.LENGTH_LONG).show();
 
             } else {
-                if (lot > 0 && expiry.isEmpty()) {
+                if (lot > 0) {
 
 
                     if (lot_postion != 0) {
