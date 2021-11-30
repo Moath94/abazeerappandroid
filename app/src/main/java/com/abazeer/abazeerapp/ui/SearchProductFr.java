@@ -259,7 +259,7 @@ public class SearchProductFr extends AppCompatDialogFragment {
 //                        intent.putExtra("barcode",val.getBarcode());
 //                        intent.putExtra("id",val.getId());
 //                        Log.e("Lots",val.getLots().get(1).getName());
-                        if (val.getLots().size() == 0){
+                        if (val.getLot() == 0){
                             lisener.productdata(String.valueOf(val.getBarcode()),val.getId(),val.getName(),val.getLot(),val.getUnit_id(),val.getUnit_name());
 
                         }else {
